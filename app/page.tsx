@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import ReactMarkdown from "react-markdown";
-import { useStreamingExplain } from "../hooks/useStreamingExplain";
+import { useStreamingExplain } from "./hooks/useStreamingExplain";
 
 export default function Home() {
   const [code, setCode] = useState("");
@@ -24,7 +24,7 @@ export default function Home() {
           <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
             AI Feature Explainer
           </h1>
-          <p className="text-slate-600">Verstaan je code in enkele seconden</p>
+          <p className="text-slate-600">Explain your code in seconds</p>
         </div>
 
         <div className="bg-white rounded-2xl shadow-xl border border-slate-200/60 p-8 mb-6">
