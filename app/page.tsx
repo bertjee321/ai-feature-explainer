@@ -7,10 +7,14 @@ import { useStreamingExplain } from "../hooks/useStreamingExplain";
 export default function Home() {
   const [code, setCode] = useState("");
   const [isELI5, setIsELI5] = useState(false);
-  const { output, loading, explainCode } = useStreamingExplain();
+  const { output, loading, explainCode, abortExplanation } = useStreamingExplain();
 
   const handleExplain = () => {
     explainCode(code, isELI5);
+  };
+
+  const handleAbort = () => {
+    abortExplanation();
   };
 
   return (
@@ -25,27 +29,41 @@ export default function Home() {
 
         <div className="bg-white rounded-2xl shadow-xl border border-slate-200/60 p-8 mb-6">
           <textarea
-            className="w-full h-48 border-2 border-slate-200 focus:border-blue-400 focus:ring-4 focus:ring-blue-100 p-4 rounded-xl mb-6 font-mono text-sm resize-none transition-all duration-200 placeholder:text-slate-400"
-            placeholder="Plak hier je code..."
+            className="w-full h-48 border-2 border-slate-200 focus:border-blue-400 focus:ring-4 focus:ring-blue-100 p-4 rounded-xl mb-6 font-mono text-sm resize-none transition-all duration-200 placeholder:text-slate-400 text-slate-800"
+            placeholder="Paste your code here... (max 10,000 characters)"
             value={code}
+            maxLength={10000}
             onChange={(e) => setCode(e.target.value)}
           />
+          
+          <div className="text-xs text-slate-500 mb-4">
+            {code.length}/10,000 characters
+          </div>
 
           <div className="flex gap-3 items-center">
-            <button
-              onClick={handleExplain}
-              disabled={loading || !code.trim()}
-              className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-6 py-3 rounded-xl font-medium shadow-lg hover:shadow-xl disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-105 disabled:hover:scale-100"
-            >
-              {loading ? "Analyseren..." : "✨ Leg uit"}
-            </button>
+            {!loading ? (
+              <button
+          onClick={handleExplain}
+          disabled={!code.trim()}
+          className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-6 py-3 rounded-xl font-medium shadow-lg hover:shadow-xl disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-105 disabled:hover:scale-100"
+              >
+          ✨ Explain
+              </button>
+            ) : (
+              <button
+          onClick={handleAbort}
+          className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white px-6 py-3 rounded-xl font-medium shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
+              >
+          ⏹ Stop
+              </button>
+            )}
 
             <button
               onClick={() => setIsELI5(!isELI5)}
               className={`px-6 py-3 rounded-xl font-medium border-2 transition-all duration-200 transform hover:scale-105 ${
-                isELI5
-                  ? "bg-gradient-to-r from-green-500 to-green-600 text-white border-green-500 shadow-lg"
-                  : "bg-white text-slate-700 border-slate-300 hover:border-slate-400 hover:bg-slate-50 shadow-sm"
+          isELI5
+            ? "bg-gradient-to-r from-green-500 to-green-600 text-white border-green-500 shadow-lg"
+            : "bg-white text-slate-700 border-slate-300 hover:border-slate-400 hover:bg-slate-50 shadow-sm"
               }`}
             >
               {isELI5 ? "✓ " : ""}🧒 ELI5
@@ -57,17 +75,24 @@ export default function Home() {
           <div className="bg-white rounded-2xl shadow-xl border border-slate-200/60 p-8">
             <h2 className="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
               <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
-              Uitleg
+              Explanation
             </h2>
             <div className="prose prose-slate max-w-none">
               <div className="whitespace-pre-wrap font-mono text-sm leading-relaxed text-slate-700 bg-slate-50 p-6 rounded-xl border">
-                {(output && <ReactMarkdown>{output}</ReactMarkdown>) ||
-                  (loading && (
-                    <div className="flex items-center gap-2 text-blue-600">
-                      <div className="animate-spin w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full"></div>
-                      AI denkt na...
-                    </div>
-                  ))}
+                {output && (
+                  <ReactMarkdown
+                    disallowedElements={['script', 'iframe', 'object', 'embed']}
+                    unwrapDisallowed={true}
+                  >
+                    {output}
+                  </ReactMarkdown>
+                )}
+                {loading && (
+                  <div className="flex items-center gap-2 text-blue-600">
+                    <div className="animate-spin w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full"></div>
+                    AI is thinking (beep boop)...
+                  </div>
+                )}
               </div>
             </div>
           </div>
