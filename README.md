@@ -67,7 +67,7 @@ pnpm dev
 2. **Choose explanation mode**:
    - Regular: Technical explanation for developers
    - ELI5: Simplified explanation with everyday analogies
-3. **Click "✨ Leg uit"** to generate the explanation
+3. **Click "✨ Explain"** to generate the explanation
 4. **View the streaming response** in real-time
 
 ## Architecture
@@ -76,15 +76,15 @@ pnpm dev
 
 ```
 ├── app/
-│   ├── api/explain/          # API endpoint for OpenAI integration
-│   ├── constants/            # Application constants and limits
-│   ├── models/              # TypeScript interfaces
-│   ├── globals.css          # Global styles
-│   ├── layout.tsx           # Root layout component
-│   └── page.tsx             # Main application page
+│   ├── api/explain/            # API endpoint for OpenAI integration
+│   ├── constants/              # Application constants and limits
+│   ├── models/                 # TypeScript interfaces
+│   ├── globals.css             # Global styles
+│   ├── layout.tsx              # Root layout component
+│   └── page.tsx                # Main application page
 ├── hooks/
-│   └── useStreamingExplain.ts # Custom hook for streaming API calls
-└── public/                  # Static assets
+│   └── useStreamingExplain.ts  # Custom hook for streaming API calls
+└── public/                     # Static assets
 ```
 
 ### Key Components
